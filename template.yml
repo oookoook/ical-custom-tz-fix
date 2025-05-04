@@ -3,11 +3,12 @@ Transform: AWS::Serverless-2016-10-31
 Description: "ICal TZ Fix API"
 Resources:
   ApiGateway:
-    Type: AWS::Serverless::Api
+    Type: AWS::Serverless::HttpApi
     Properties:
       StageName: latest
-      Cors: "'*'"
-      EndpointConfiguration: Edge  
+      CorsConfiguration:
+        AllowOrigins:
+          - "*"  
   LambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -21,39 +22,39 @@ Resources:
       CodeUri: ./
       Events:
         GetEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /
             Method: GET
         PostEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /
             Method: POST
         OptionsEvent:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /
             Method: OPTIONS
         GetEventProxy:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /{proxy+}
             Method: GET
         PostEventProxy:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /{proxy+}
             Method: POST
         OptionsEventProxy:
-          Type: Api
+          Type: HttpApi
           Properties:
-            RestApiId: !Ref ApiGateway
+            ApiId: !Ref ApiGateway
             Path: /{proxy+}
             Method: OPTIONS
 Parameters:
