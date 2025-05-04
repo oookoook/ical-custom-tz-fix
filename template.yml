@@ -65,7 +65,7 @@ Parameters:
   MaxMemory:
     Type: Number
     Description: Maximum megabytes of memory for the Lambda function
-    Default: 3008
+    Default: 128
 Outputs:
   ApiEndpoint:
     Description: "API endpoint"
