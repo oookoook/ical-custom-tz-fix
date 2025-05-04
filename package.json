@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node local"
+    "dev": "dotenvx run -- node local"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   "homepage": "https://github.com/oookoook/ical-custom-tz-fix#readme",
   "dependencies": {
     "@codegenie/serverless-express": "^4.16.0",
+    "@dotenvx/dotenvx": "^1.43.0",
     "cors": "^2.8.5",
     "express": "^5.1.0"
   }
