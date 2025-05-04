@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: "ICal TZ Fix API"
+Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: latest
+      Cors: "'*'"
+      EndpointConfiguration: Edge
+      BinaryMediaTypes:
+       - application/pdf
+       - application/octet-stream
+        
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda.handler
+      Runtime: nodejs22.x
+      MemorySize: !Ref MaxMemory
+      Environment:
+        Variables:
+          API_KEY: !Ref ApiKey
+      Timeout: 300
+      CodeUri: ./
+      Events:
+        GetEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /
+            Method: GET
+        PostEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /
+            Method: POST
+        OptionsEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /
+            Method: OPTIONS
+        GetEventProxy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: GET
+        PostEventProxy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: POST
+        OptionsEventProxy:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /{proxy+}
+            Method: OPTIONS
+Parameters:
+  ApiKey:
+    Type: String
+    Description: API key used to authenticate the request
+    Default: 0000
+  MaxMemory:
+    Type: Number
+    Description: Maximum megabytes of memory for the Lambda function
+    Default: 3008
+Outputs:
+  ApiEndpoint:
+    Description: "API endpoint"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/latest/"

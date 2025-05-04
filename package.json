@@ -1,0 +1,25 @@
+{
+  "name": "ical-custom-tz-fix",
+  "version": "1.0.0",
+  "description": "Lmbda to fix custom timezone produced by O365",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node local"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oookoook/ical-custom-tz-fix.git"
+  },
+  "author": "Adam Kučera/Nastojte.cz/oookoook",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/oookoook/ical-custom-tz-fix/issues"
+  },
+  "homepage": "https://github.com/oookoook/ical-custom-tz-fix#readme",
+  "dependencies": {
+    "@codegenie/serverless-express": "^4.16.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0"
+  }
+}

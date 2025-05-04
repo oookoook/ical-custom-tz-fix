@@ -1,0 +1,49 @@
+# filepath: .github/workflows/deploy.yml
+name: SAM Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      STACK_NAME: ${{ vars.STACK_NAME }}  # Make sure to set this variable in repository settings
+      MAX_MEMORY: ${{ vars.MAX_MEMORY }}  # Set in repository settings
+      API_KEY: ${{ vars.API_KEY }}
+      REGION: ${{ vars.REGION }}        # Set in repository settings
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install AWS SAM CLI
+        run: |
+          pip install aws-sam-cli
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.REGION }}
+
+      - name: Build SAM application
+        run: |
+          echo '{
+            "ParameterOverrides": {
+              "MaxMemory": "'"$MAX_MEMORY"'",
+              "ApiKey": "'"$API_KEY"'"
+            }
+          }' > templateconfig.json
+          sam build --template-configuration templateconfig.json
+
+      - name: Deploy SAM application
+        run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name ${{ env.STACK_NAME }} --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM

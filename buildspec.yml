@@ -1,0 +1,22 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - yum update -y
+      - yum install -y gettext
+      - npm install
+      - echo '{
+          "ParameterOverrides": {
+            "MaxMemory": "'"$MAX_MEMORY"'",
+            "ApiKey": "'"$API_KEY"'"
+          }
+        }' > templateconfig.json
+      - aws cloudformation package --template-file sam-template.yml --s3-bucket $S3_BUCKET --output-template-file outputtemplate.yml
+artifacts:
+  type: zip
+  files:
+    - sam-template.yml
+    - outputtemplate.yml
+    - templateconfig.json
