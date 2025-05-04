@@ -22,6 +22,12 @@ const isAuthenticated = function (req, res, next) {
 
 app.use(isAuthenticated);
 
+app.route('/')
+    .get(function(req, res) {
+        // return hello world in JSON
+        res.json({ message: 'Hello World!' });
+    })
+
 app.route('/fixed-ical.ics')
     .get(function(req, res) {
         // Retrieve query parameters
