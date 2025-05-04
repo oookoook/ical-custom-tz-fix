@@ -47,6 +47,7 @@ jobs:
         run: |
           sam deploy --no-confirm-changeset \
           --no-fail-on-empty-changeset \
+          --resolve-s3 \
           --stack-name ${{ env.STACK_NAME }} \
           --parameter-overrides \
           ParameterKey=MAX_MEMORY,ParameterValue=${{ env.MAX_MEMORY }} \
