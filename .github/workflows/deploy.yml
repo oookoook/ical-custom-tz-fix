@@ -38,11 +38,6 @@ jobs:
       - name: Build SAM application
         run: sam build
       
-      - name: Print overrides
-        run: |
-          echo 'ParameterKey=MAX_MEMORY,ParameterValue=${{ env.MAX_MEMORY }} \
-          ParameterKey=API_KEY,ParameterValue="${{ env.API_KEY }}"' 
-
       - name: Deploy SAM application
         run: |
           sam deploy --no-confirm-changeset \
@@ -50,6 +45,6 @@ jobs:
           --resolve-s3 \
           --stack-name ${{ env.STACK_NAME }} \
           --parameter-overrides \
-          ParameterKey=MAX_MEMORY,ParameterValue=${{ env.MAX_MEMORY }} \
-          ParameterKey=API_KEY,ParameterValue="${{ env.API_KEY }}" \
+          ParameterKey=MaxMemory,ParameterValue=${{ env.MAX_MEMORY }} \
+          ParameterKey=ApiKey,ParameterValue="${{ env.API_KEY }}" \
           --capabilities CAPABILITY_IAM CAPABILITY_NAMED_IAM
