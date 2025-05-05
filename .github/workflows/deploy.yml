@@ -1,6 +1,11 @@
 # filepath: .github/workflows/deploy.yml
 name: SAM Deploy
 
+# Required for GitHub Actions OIDC to work with AWS
+permissions:
+  id-token: write
+  contents: read
+
 on:
   push:
     branches:
@@ -14,13 +19,14 @@ jobs:
       STACK_NAME: ${{ vars.STACK_NAME }}  # Make sure to set this variable in repository settings
       MAX_MEMORY: ${{ vars.MAX_MEMORY }}  # Set in repository settings
       API_KEY: ${{ vars.API_KEY }}
-      REGION: ${{ vars.REGION }}        # Set in repository settings
+      REGION: ${{ vars.REGION }}
+      ROLE: ${{ vars.AWS_ROLE_ARN }}        # Set in repository settings
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
 
@@ -29,10 +35,11 @@ jobs:
           pip install aws-sam-cli
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4.1.0
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          #aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: ${{ env.ROLE }}
           aws-region: ${{ env.REGION }}
 
       - name: Build SAM application

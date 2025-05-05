@@ -37,4 +37,4 @@ Parameters:
 Outputs:
   ApiEndpoint:
     Description: "API endpoint"
-    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/latest/"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/"
