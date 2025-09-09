@@ -20,6 +20,7 @@
   "dependencies": {
     "@codegenie/serverless-express": "^4.16.0",
     "@dotenvx/dotenvx": "^1.43.0",
+    "axios": "^1.11.0",
     "cors": "^2.8.5",
     "express": "^5.1.0"
   }

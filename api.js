@@ -1,5 +1,6 @@
 const express = require('express');
 var cors = require('cors');
+const axios = require('axios');
 
 const app = express();
 
@@ -44,19 +45,21 @@ app.route('/fixed-ical.ics')
             return res.status(400).send('Invalid "ical" URL provided.');
         }
         
-        // Choose appropriate protocol module
-        const protocol = icalUrl.startsWith('https') ? require('https') : require('http');
-        protocol.get(icalUrl, (response) => {
-            let content = '';
-            response.on('data', (chunk) => {
-                content += chunk;
-            });
-            response.on('end', () => {
-                const modified = content.replace(/Customized Time Zone/g, fixedTz);
-                res.send(modified);
-            });
-        }).on('error', (err) => {
-            console.error(err);
+        // Use axios to fetch the iCal content
+        axios.get(icalUrl, {
+            headers: {
+                //'User-Agent': 'curl/8.5.0',
+                //'Accept': '*/*'
+            },
+            responseType: 'text'
+        })
+        .then(response => {
+            const modified = response.data.replace(/Customized Time Zone/g, fixedTz);
+            res.set('Content-Type', 'text/calendar');
+            res.send(modified);
+        })
+        .catch(err => {
+            console.error('Error downloading iCal feed:', err.message);
             res.status(500).send('Error downloading iCal feed.');
         });
     });
