@@ -22,7 +22,7 @@ For more information, read the [original docs](https://github.com/marketplace/ac
 
 Create a CloudFormation stack using the `oidc-iam-role-cf-template.yml` file.
 
-The role in the privided stackis restricted to the GitHub user/org, not for the repository. This way this role can be re-used by multiple repositories. Uncomment the lines if you wont to resrict the role to a single repository.
+The role in the privided stack is restricted to the GitHub user/org, not for the repository. This way this role can be re-used by multiple repositories. Uncomment the lines if you wont to resrict the role to a single repository.
 
 ## Creating IAm policy
 
